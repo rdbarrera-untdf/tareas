@@ -11,12 +11,15 @@ try {
     $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+
     // Obtener todas las tareas
     $stmt = $pdo->query("SELECT * FROM tasks");
     $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
+
 ?>
 
 
@@ -26,12 +29,29 @@ try {
 </head>
 
 <body style="background-color:LightGoldenrodYellow;">
+<style>
+	.pag{
+margin-left:10px;
+margin-top:3px;
+margin-rigth:10px;
+margin-bottom:3px;
+
+	}
+</style>
 </body>
+
+
+<div id="pag" name="pag">
+
 <div class="d-flex justify-content-center">
 <h1 style="color :blue;">Lista de Tareas</h1>
 </div>
+
+<!-- crear tarea-->
 <a class="btn btn-primary" href="create.php" role="button">Crear Nueva Tarea</a>
-<div> .</div>
+<br>
+<br>
+
 <style>
   table{
 	background-color:ligthblue;
@@ -63,3 +83,4 @@ try {
     </tbody>
 </table>
 
+</div>
