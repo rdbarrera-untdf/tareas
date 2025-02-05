@@ -32,16 +32,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<h1>Crear Nueva Tarea</h1>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body style="background-color:LightGoldenrodYellow;">
+</body>
+
+
+
+<div class="container mb-4 mt-4">
+<div class="d-flex justify-content-center">
+<h1 style= "color:blue">Crear Tarea</h1>
+</div>
+<br>
+
 <form method="POST">
-    <label for="descripcion">Descripción:</label>
-    <input type="text" id="descripcion" name="descripcion" required><br>
 
-    <label for="fecha">Fecha:</label>
-    <input type="text" id="fecha" name="fecha" required><br>
-
-    <label for="estado">Estado:</label>
-    <input type="text" id="estado" name="estado" required><br>
-
-    <input type="submit" value="Crear Tarea">
+	<div class="card text-bg-secondary mb-3">
+		<div class="card-body">
+			<div class="mb-3">
+    				<label for="descripcion" class="form-label">Descripción:</label>
+    				<input type="text" class="form-control" id="descripcion" name="descripcion"><br>
+			</div>
+			<div class="mb-3">
+    				<label for="fecha" class="form-label">Fecha:</label>
+    				<input type="text" class="form-control" id="fecha" name="fecha"><br>
+			</div>
+			<div class="mb-3">
+				<label for="estado" class="form-label">Estado:</label>
+    				<input type="text" class="form-control" id="estado" name="estado"><br>
+			</div>
+    			<input type="submit" class="btn btn-primary"value="Crear Tarea">
+			<input type="submit" class="btn btn-primary btn-sm" href="index.php" value="Volver">
+		</div>
+	</div>
 </form>
+</div>
