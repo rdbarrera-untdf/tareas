@@ -50,12 +50,15 @@ if (isset($_GET['id'])) {
 <body style="background-color:LightGoldenrodYellow;">
 </body>
 
+
+
+<div class="container mb-4 mt-4">
 <div class="d-flex justify-content-center">
 <h1 style= "color:blue">Editar Tarea</h1>
 </div>
 
 <form method="POST">
-<div class="card text-bg-light mb-3">
+<div class="card text-bg-secondary mb-3">
 <div class="card-body">
 <div class="mb-3">
   <label for="descripcion" class="form-label">Descripcion</label>
@@ -70,6 +73,9 @@ if (isset($_GET['id'])) {
   <input type="text" class="form-control" id="estado"  name="estado" value="<?php echo htmlspecialchars($task['estado']); ?>">
 </div>
 <input type="submit" class="btn btn-primary" value="Actualizar Tarea">
+<input type="submit" href="index.php" class="btn btn-primary btn-sm" value="Voler">
+
 </div>
 </div>
 </form>
+</div>

@@ -33,7 +33,7 @@ try {
 	.pag{
 margin-left:10px;
 margin-top:3px;
-margin-rigth:10px;
+margin-right:10px;
 margin-bottom:3px;
 
 	}
@@ -41,7 +41,7 @@ margin-bottom:3px;
 </body>
 
 
-<div id="pag" name="pag">
+<div class="container mt-4 mb-4">
 
 <div class="d-flex justify-content-center">
 <h1 style="color :blue;">Lista de Tareas</h1>
@@ -54,7 +54,7 @@ margin-bottom:3px;
 
 <style>
   table{
-	background-color:ligthblue;
+	background-color:lightblue;
 }
 </style>
 <table class="table table-success table-striped">
