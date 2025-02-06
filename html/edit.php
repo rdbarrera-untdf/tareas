@@ -72,8 +72,8 @@ if (isset($_GET['id'])) {
   <label for="estado" class="form-label">Estado</label>
   <input type="text" class="form-control" id="estado"  name="estado" value="<?php echo htmlspecialchars($task['estado']); ?>">
 </div>
-<input type="submit" class="btn btn-primary" value="Actualizar Tarea">
-<input type="submit" href="index.php" class="btn btn-primary btn-sm" value="Voler">
+<input type="submit" class="btn btn-success" value="Actualizar Tarea">
+<input type="submit" href="index.php" class="btn btn-danger btn-sm" value="Volver">
 
 </div>
 </div>

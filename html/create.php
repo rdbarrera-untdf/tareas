@@ -11,24 +11,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $fecha = $_POST['fecha'];
     $estado = $_POST['estado'];
 
-    try {
-        // Conexión PDO con PostgreSQL
-        $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	if (!empty($descripcion)&&!empty(estado)){
+    		try {
+        		// Conexión PDO con PostgreSQL
+        		$pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
+        		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Insertar nueva tarea
-        $stmt = $pdo->prepare("INSERT INTO tasks (descripcion, fecha, estado) VALUES (:descripcion, :fecha, :estado)");
-        $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
-        $stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
-        $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
-        $stmt->execute();
+        		// Insertar nueva tarea
+        		$stmt = $pdo->prepare("INSERT INTO tasks (descripcion, fecha, estado) VALUES (:descripcion, :fecha, :estado)");
+        		$stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+        		$stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+        		$stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
+        		$stmt->execute();
 
-        // Redirigir al index
-        header("Location: index.php");
-        exit;
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
+        		// Redirigir al index
+        		header("Location: index.php");
+        		exit;
+    		} catch (PDOException $e) {
+        		echo "Error: " . $e->getMessage();
+    		}
+	}else header("Location: index.php");
 }
 ?>
 
@@ -57,14 +59,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			</div>
 			<div class="mb-3">
     				<label for="fecha" class="form-label">Fecha:</label>
-    				<input type="text" class="form-control" id="fecha" name="fecha"><br>
+    				<input type="date" class="form-control" id="fecha" name="fecha"><br>
 			</div>
 			<div class="mb-3">
 				<label for="estado" class="form-label">Estado:</label>
     				<input type="text" class="form-control" id="estado" name="estado"><br>
 			</div>
-    			<input type="submit" class="btn btn-primary"value="Crear Tarea">
-			<input type="submit" class="btn btn-primary btn-sm" href="index.php" value="Volver">
+    			<input type="submit" class="btn btn-success"value="Crear Tarea">
+			<input type="submit" class="btn btn-danger btn-sm" href="index.php" value="Volver">
 		</div>
 	</div>
 </form>
