@@ -22,6 +22,7 @@ try {
 	$query = "SELECT * FROM tasks WHERE 1=1"; // 1=1 permite agregar condiciones dinámicas
     	$params = [];
 
+
     if (!empty($descripcion_filtro)) {
         $query .= " AND descripcion ILIKE :descripcion";
         $params[':descripcion'] = "%$descripcion_filtro%";
@@ -120,6 +121,7 @@ try {
                     <th>Descripción</th>
                     <th>Fecha</th>
                     <th>Estado</th>
+		    <th>Usuario</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -130,7 +132,8 @@ try {
                         <td><?php echo htmlspecialchars($task['descripcion']); ?></td>
                         <td><?php echo htmlspecialchars($task['fecha']); ?></td>
                         <td><?php echo htmlspecialchars($task['estado']); ?></td>
-                        <td>
+                        <td></td>
+			<td>
                             <a href="edit.php?id=<?php echo $task['id']; ?>" class="btn btn-warning btn-sm">Editar</a>
                             <a href="delete.php?id=<?php echo $task['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta tarea?')">Eliminar</a>
                         </td>
