@@ -1,4 +1,6 @@
 <?php
+include 'db.php';
+/*
 // Configuración de la base de datos
 $host = 'db';
 $port = '5432';
@@ -8,18 +10,22 @@ $password = 'postgres';
 
 try {
     // Conexión PDO con PostgreSQL
-    $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password,[PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
 
+// $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+*/
 
     //capturar filtro
 	$descripcion_filtro= $_GET['descripcion'] ?? '';
 	$fecha_inicio= $_GET['fecha_inicio'] ?? '';
 	$fecha_fin=$GET['fecha_fin'] ?? '';
 	$estado_filtro=$_GET['estado'] ?? '';
+	$user_id_filtro=$_GET['user_id'] ?? '';
 
     //hacer la consulta
-	$query = "SELECT * FROM tasks WHERE 1=1"; // 1=1 permite agregar condiciones dinámicas
+
+	$query = "SELECT tasks.id, tasks.descripcion, tasks.fecha, tasks.estado, users.nombre as usuario FROM tasks LEFT JOIN users ON tasks.user_id = users.id"; // 1=1 permite agregar condiciones dinámicas WHERE 1=1
     	$params = [];
 
 
@@ -41,7 +47,10 @@ try {
 	$query .=" AND estado ILIKE :estado";
 	$params[':estado']="%$estado_filtro%";
     }
-
+    if (!empty($user_id_filtro)){
+	$query .= " AND user_id ILIKE : user_id";
+	$params[':user_id']="%$user_id_filtro%";
+    }
     // Ejecutar la consulta con los filtros
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
@@ -53,10 +62,11 @@ try {
     $stmt = $pdo->query("SELECT * FROM tasks");
     $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
+/*
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
-
+*/
 ?>
 
 <!DOCTYPE html>
@@ -96,13 +106,22 @@ try {
                     <label for="fecha_fin" class="form-label">Fecha fin:</label>
                     <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="<?php echo htmlspecialchars($fecha_fin); ?>">
                 </div>
+		<div class="col">
+		   <label for="usuario" class="form-label">Usuario:</label>
+		   <select name="user_id">
+			<?php foreach ($users as $user): ?>
+				<option value="<?=$user[id] ?>"><?= $user['nombre'] ?></option>
+			<?php endforeach; ?>
+		   </select>
+		</div>
 	    </div>
-            <div class="col d-flex align-items-end">
+
+            <div class="row align-items-center"> <!--  d-flex align-items-end -->
 	    	<div class="col">
-			<button type="submit" class="btn btn-primary btn">Filtrar</button>
+			<button type="submit" class="btn btn-outline-primary">Filtrar</button>
 		</div>
 	   	<div class="col">
-			<a href="index.php" class="btn btn-primary btn">Borrar</a>
+			<a href="index.php" class="btn btn-outline-danger">Borrar</a>
 		</div>
             </div>
         </form>
@@ -132,10 +151,10 @@ try {
                         <td><?php echo htmlspecialchars($task['descripcion']); ?></td>
                         <td><?php echo htmlspecialchars($task['fecha']); ?></td>
                         <td><?php echo htmlspecialchars($task['estado']); ?></td>
-                        <td></td>
+                        <td><?php echo htmlspecialchars($task['usuario']); ?></td>
 			<td>
-                            <a href="edit.php?id=<?php echo $task['id']; ?>" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="delete.php?id=<?php echo $task['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta tarea?')">Eliminar</a>
+                            <a href="edit.php?id=<?php echo $task['id']; ?>" class="btn btn-outline-info btn-sm">Editar</a>
+                            <a href="delete.php?id=<?php echo $task['id']; ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta tarea?')">Eliminar</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

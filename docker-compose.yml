@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:latest
+    container_name: tareas-app-postgres
     mem_limit: 512m
     environment:
       POSTGRES_USER: postgres
@@ -34,20 +35,19 @@ services:
     restart: no
 
   jasperreports:
-    image: bitnami/jasperreports
-    container_name: jasperreports
+    image: bitnami/jasperreports:latest
+    environment:
+      JASPERREPORTS_DATABASE_HOST: tareas-app-postgres
+      JASPERREPORTS_DATABASE_PORT_NUMBER: 5432
+      JASPERREPORTS_DATABASE_NAME: tareas
+      JASPERREPORTS_DATABASE_USER: postgres
+      JASPERREPORTS_DATABASE_PASSWORD: postgres
+      JASPERREPORTS_USERNAME: admin
+      JASPERREPORTS_PASSWORD: admin
+    ports:
+      - "8081:8080"
     depends_on:
       - db
-    environment:
-      JASPERREPORTS_DATABASE_TYPE: postgresql
-      JASPERREPORTS_DATABASE_HOST: postgres
-      JASPERREPORTS_DATABASE_PORT_NUMBER: 5432
-      JASPERREPORTS_DATABASE_NAME: jasperdb
-      JASPERREPORTS_DATABASE_USER: jasper
-      JASPERREPORTS_DATABASE_PASSWORD: jasperpassword
-    ports:
-      - "9090:8080"
-
 
 volumes:
   postgres_data:
