@@ -1,20 +1,5 @@
 <?php
 include 'db.php';
-/*
-// Configuración de la base de datos
-$host = 'db';
-$port = '5432';
-$dbname = 'tareas';
-$user = 'postgres';
-$password = 'postgres';
-
-try {
-    // Conexión PDO con PostgreSQL
-    $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password,[PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
-
-// $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-*/
 
     //capturar filtro
 	$descripcion_filtro= $_GET['descripcion'] ?? '';
@@ -23,9 +8,13 @@ try {
 	$estado_filtro=$_GET['estado'] ?? '';
 	$user_id_filtro=$_GET['user_id'] ?? '';
 
-    //hacer la consulta
+    // obtener la lista de usuarios
+	$query_users = "SELECT id, nombre FROM users";
+	$stmt_users = $pdo->query($query_users);
+	$users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
 
-	$query = "SELECT tasks.id, tasks.descripcion, tasks.fecha, tasks.estado, users.nombre as usuario FROM tasks LEFT JOIN users ON tasks.user_id = users.id"; // 1=1 permite agregar condiciones dinámicas WHERE 1=1
+    //hacer la consulta
+	$query = "SELECT tasks.id, tasks.descripcion, tasks.fecha, tasks.estado, users.nombre as usuario FROM tasks LEFT JOIN users ON tasks.user_id = users.id WHERE 1=1"; // 1=1 permite agregar condiciones dinámicas WHERE 1=1
     	$params = [];
 
 
@@ -48,8 +37,8 @@ try {
 	$params[':estado']="%$estado_filtro%";
     }
     if (!empty($user_id_filtro)){
-	$query .= " AND user_id ILIKE : user_id";
-	$params[':user_id']="%$user_id_filtro%";
+	$query .= " AND user_id = :user_id";
+	$params[':user_id']=$user_id_filtro;
     }
     // Ejecutar la consulta con los filtros
     $stmt = $pdo->prepare($query);
@@ -108,12 +97,15 @@ try {
                 </div>
 		<div class="col">
 		   <label for="usuario" class="form-label">Usuario:</label>
-		   <select name="user_id">
+		   <select class="form-control" name="user_id">
+			<option value="">Todos</option>
 			<?php foreach ($users as $user): ?>
-				<option value="<?=$user[id] ?>"><?= $user['nombre'] ?></option>
+				<option value="<?= $user['id']; ?>" <?= $user_id_filtro == $user['id'] ? 'selected' : '';?>>
+					<?= htmlspecialchars($user['nombre']); ?>
+				</option>
 			<?php endforeach; ?>
 		   </select>
-		</div>
+	        </div>
 	    </div>
 
             <div class="row align-items-center"> <!--  d-flex align-items-end -->
