@@ -15,7 +15,7 @@ services:
       - backend
     restart: no
   php:
-    #image: php:8.1-apache
+    image: php:8.1-apache
     mem_limit: 512m
     build:
       context: .
@@ -33,21 +33,6 @@ services:
     networks:
       - backend
     restart: no
-
-  jasperreports:
-    image: bitnami/jasperreports:latest
-    environment:
-      JASPERREPORTS_DATABASE_HOST: tareas-app-postgres
-      JASPERREPORTS_DATABASE_PORT_NUMBER: 5432
-      JASPERREPORTS_DATABASE_NAME: tareas
-      JASPERREPORTS_DATABASE_USER: postgres
-      JASPERREPORTS_DATABASE_PASSWORD: postgres
-      JASPERREPORTS_USERNAME: admin
-      JASPERREPORTS_PASSWORD: admin
-    ports:
-      - "8081:8080"
-    depends_on:
-      - db
 
 volumes:
   postgres_data:

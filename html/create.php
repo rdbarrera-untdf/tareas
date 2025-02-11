@@ -1,13 +1,14 @@
 <?php
-/*
-// Configuración de la base de datos
-$host = 'db';
-$port = '5432';
-$dbname = 'tareas';
-$user = 'postgres';
-$password = 'postgres';
-*/
+
 include 'db.php';
+// obtengo los usuarios
+try {
+	$stmt= $pdo->query("SELECT id, nombre FROM users");
+	$users =$stmt->fetchAll(PDO::FETCH_ASSOC);
+}catch (PDOException $e){
+	echo "Error al obtener usuarios: " . $e->getMMessage();
+	exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $descripcion = $_POST['descripcion'];
@@ -15,13 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $estado = $_POST['estado'];
     $user_id = $_POST['user_id'];
 
-	if (!empty($descripcion)&&!empty(estado)){
-    	/*	try {
-        		// Conexión PDO con PostgreSQL
-        		$pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
-        		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-*/
-        		// Insertar nueva tarea
+	if (!empty($descripcion)&&!empty($estado)&&!empty($user_id)){
+       		// Insertar nueva tarea
         		$stmt = $pdo->prepare("INSERT INTO tasks (descripcion, fecha, estado, user_id) VALUES (:descripcion, :fecha, :estado, :user_id)");
         		$stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
         		$stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
@@ -29,13 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         		$stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
 			$stmt->execute();
 
-        		// Redirigir al index
-        		header("Location: index.php");
+        	// Redirigir al index
+	       		header("Location: index.php");
         		exit;
-    	/*	} catch (PDOException $e) {
-        		echo "Error: " . $e->getMessage();
-    		}*/
-	}else header("Location: index.php");
+  	}else header("Location: index.php");
 }
 ?>
 
@@ -72,14 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			</div>
 			<div>
 				<label for="usuario" class="form-label">Usuario:</label>
-				<select name="user_id">
-					<?php foreach ($users as $user): ?>
-						<option value="<?= $user['id'] ?>"><?= $user['nombre'] ?></option>
-					<?php endforeach; ?>
-				</select>
+				<select name="user_id" id="user_id" class="form-control" required>
+                            		<option value="">Seleccione un usuario</option>
+                            			<?php foreach ($users as $user): ?>
+                                			<option value="<?= $user['id'] ?>"><?= $user['nombre'] ?></option>
+                            			<?php endforeach; ?>
+                        	</select>
 			</div>
     			<input type="submit" class="btn btn-success"value="Crear Tarea">
-			<input type="submit" class="btn btn-danger btn-sm" href="index.php" value="Volver">
+			<a href="index.php" class="btn btn-danger btn-sm" ">Volver</a>
 		</div>
 	</div>
 </form>
